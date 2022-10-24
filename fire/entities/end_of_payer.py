@@ -5,8 +5,8 @@ and support functions for conversion into different formats.
 """
 from itertools import chain
 
-from fire.translator.util import rjust_zero
-from fire.translator.util import factor_transforms, xform_entity, fire_entity
+from fire.translator.util import (factor_transforms, fire_entity, rjust_zero,
+                                  xform_entity)
 
 """
 _END_OF_PAYER_TRANSFORMS
@@ -23,20 +23,22 @@ _ITEMS = [
     ("blank_1", ("", 6, "\x00", lambda x: x)),
 ]
 
-for field in chain((x for x in range(1, 10)), \
-                   (chr(x) for x in range(ord('A'), ord('I'))), \
-                   'J'):
-    _ITEMS.append((f"payment_amount_{field}",
-                   (18*"0", 18, "0", lambda x: rjust_zero(x, 18))))
+for field in chain(
+    (x for x in range(1, 10)), (chr(x) for x in range(ord("A"), ord("I"))), "J"
+):
+    _ITEMS.append(
+        (f"payment_amount_{field}", (18 * "0", 18, "0", lambda x: rjust_zero(x, 18)))
+    )
 
 _ITEMS += [
     ("blank_2", ("", 160, "\x00", lambda x: x)),
     ("record_sequence_number", ("", 8, "0", lambda x: x)),
     ("blank_3", ("", 241, "\x00", lambda x: x)),
-    ("blank_4", ("", 2, "\x00", lambda x: x))
+    ("blank_4", ("", 2, "\x00", lambda x: x)),
 ]
 
 _END_OF_PAYER_SORT, _END_OF_PAYER_TRANSFORMS = factor_transforms(_ITEMS)
+
 
 def xform(data):
     """
@@ -57,6 +59,7 @@ def xform(data):
         parameter.
     """
     return xform_entity(_END_OF_PAYER_TRANSFORMS, data)
+
 
 def fire(data):
     """

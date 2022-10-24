@@ -3,8 +3,8 @@ Module: entities.payer
 Representation of a "payer" record, including transformation functions
 and support functions for conversion into different formats.
 """
-from fire.translator.util import digits_only, uppercase, rjust_zero
-from fire.translator.util import factor_transforms, xform_entity, fire_entity
+from fire.translator.util import (digits_only, factor_transforms, fire_entity,
+                                  rjust_zero, uppercase, xform_entity)
 
 """
 _PAYER_TRANSFORMS
@@ -36,13 +36,13 @@ _ITEMS = [
     ("payer_zip_code", ("", 9, "\x00", digits_only)),
     ("payer_telephone_number_and_ext", ("", 15, "\x00", digits_only)),
     ("blank_3", ("", 260, "\x00", lambda x: x)),
-    ("record_sequence_number",
-     ("00000002", 8, "\x00", lambda x: rjust_zero(x, 8))),
+    ("record_sequence_number", ("00000002", 8, "\x00", lambda x: rjust_zero(x, 8))),
     ("blank_4", ("", 241, "\x00", lambda x: x)),
-    ("blank_5", ("", 2, "\x00", lambda x: x))
+    ("blank_5", ("", 2, "\x00", lambda x: x)),
 ]
 
 _PAYER_SORT, _PAYER_TRANSFORMS = factor_transforms(_ITEMS)
+
 
 def xform(data):
     """
@@ -63,6 +63,7 @@ def xform(data):
         parameter.
     """
     return xform_entity(_PAYER_TRANSFORMS, data)
+
 
 def fire(data):
     """
